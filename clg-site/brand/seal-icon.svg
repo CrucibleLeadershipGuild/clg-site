@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="480" height="480" viewBox="0 0 480 480" xml:space="preserve">
+<desc>Created with Fabric.js 6.5.3</desc>
+<defs>
+</defs>
+<g transform="matrix(4 0 0 4 236.1797 252.0563)"  >
+<polygon style="stroke: rgb(28,36,48); stroke-width: 3.5; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"  points="0,-46 40,-23 40,23 0,46 -40,23 -40,-23 " />
+</g>
+<g transform="matrix(4 0 0 4 236.1797 252.0563)"  >
+<polygon style="stroke: rgb(201,164,92); stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: none; fill-rule: nonzero; opacity: 1;"  points="0,-37 32,-18.5 32,18.5 0,37 -32,18.5 -32,-18.5 " />
+</g>
+<g transform="matrix(2.8284 2.8284 -2.8284 2.8284 236.1797 68.0563)"  >
+<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(181,86,42); fill-rule: nonzero; opacity: 1;"  x="-5" y="-5" rx="0" ry="0" width="10" height="10" />
+</g>
+<g transform="matrix(4 0 0 4 236.1796 256.488)" style=""  >
+		<text xml:space="preserve" font-family="Times New Roman" font-size="22" font-style="normal" font-weight="700" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(28,36,48); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-24.8369" y="6.9111" >C</tspan><tspan x="-7.9492" y="6.9111" >L</tspan><tspan x="7.7246" y="6.9111" >G</tspan></text>
+</g>
+<g transform="matrix(4 0 0 4 236.1797 321.0563)"  >
+<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(181,86,42); fill-rule: nonzero; opacity: 1;"  x="-12" y="-1.25" rx="0" ry="0" width="24" height="2.5" />
+</g>
+</svg>

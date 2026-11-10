@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="1280" height="480">
+  <title>Crucible Leadership Guild - The guild seal (reversed)</title>
+  <style>@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&amp;display=swap'); .w{font-family:Cinzel,Georgia,serif}</style>
+  <rect width="320" height="120" fill="#1C2430"/>
+  <polygon points="60,14 100,37 100,83 60,106 20,83 20,37" fill="none" stroke="#F4F1EA" stroke-width="3.5"/>
+  <polygon points="60,23 92,41.5 92,78.5 60,97 28,78.5 28,41.5" fill="none" stroke="#C9A45C" stroke-width="1"/>
+  <rect x="55" y="9" width="10" height="10" transform="rotate(45 60 14)" fill="#B5562A"/>
+  <text x="60" y="68" text-anchor="middle" class="w" fill="#F4F1EA" font-size="22" font-weight="700" letter-spacing="1">CLG</text>
+  <rect x="48" y="76" width="24" height="2.5" fill="#B5562A"/>
+  <rect x="120" y="30" width="1" height="60" fill="#C9A45C"/>
+  <text x="136" y="60" class="w" fill="#F4F1EA" font-size="28" font-weight="700" letter-spacing="2">CRUCIBLE</text>
+  <text x="137" y="82" class="w" fill="#C9A45C" font-size="12" font-weight="500" letter-spacing="3.5">LEADERSHIP GUILD</text>
+</svg>

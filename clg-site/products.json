@@ -1,0 +1,121 @@
+{
+  "site": {
+    "name": "Crucible Leadership Guild",
+    "short": "CLG",
+    "tagline": "Leadership tools and mentoring, forged through practice.",
+    "logo": "seal",
+    "url": "https://crucibleleadershipguild.com",
+    "email": "leadership@crucibleleadershipguild.com",
+    "availability": "Available to customers in the United States only.",
+    "portalUrl": "https://billing.stripe.com/p/login/dRmcN79fSekYdW1ctr4Vy00"
+  },
+  "products": [
+    {
+      "slug": "review-season-kit",
+      "name": "CLG Review Season Kit",
+      "summary": "300+ phrases, 5 conversation scripts and the templates you need to write fair, specific performance reviews, without the blank page.",
+      "description": [
+        "Built for managers of all levels writing year-end reviews, and for anyone writing a self-evaluation. Every phrase follows one rule: describe what the person did, why it mattered, and what happens next.",
+        "Includes guidance for the hard cases: remote employees, top performers, people who are great at the job but hard to work with, former peers, a hard personal year, and reviews that may lead to a PIP.",
+        "This kit offers general guidance on writing reviews. It is not legal or HR advice."
+      ],
+      "includes": [
+        "Quick start: how to use the kit, the formula and a 6-week review timeline",
+        "Phrase bank: 300 phrases across 10 skill areas and 3 rating levels",
+        "Special cases for remote employees, top performers, former peers and more",
+        "5 conversation scripts plus a 15-minute meeting agenda",
+        "Self-evaluation template with a filled-in example",
+        "Pre-submit checklist with words to avoid and a calibration cheat sheet"
+      ],
+      "price": "$20",
+      "checkoutUrl": "https://buy.stripe.com/4gM28t8bOekYg491ON4Vy04",
+      "stripePriceId": "price_1UZfyXRr7y7L3AMy1olEs4dJ",
+      "file": "CLG_Review_Season_Kit.pdf"
+    },
+    {
+      "slug": "wrong-mode-course",
+      "name": "CLG Wrong Mode Course",
+      "summary": "A course on leading, managing and mentoring: how to choose the right mode for the moment.",
+      "description": [
+        "Leadership, management and mentoring are three modes one person switches between, often in the same week, not three separate roles. People rarely fail because they lack one of them. They fail because they use the wrong mode at the wrong moment, like mentoring someone who needed a clear decision.",
+        "Most people are promoted for being good at the work and trained only in the mechanics of management. This course builds leadership and mentoring deliberately, with a three-question diagnostic, exercises and discussion questions, and sources for every cited idea."
+      ],
+      "includes": [
+        "Module 1: Three modes, not three roles",
+        "Module 2: Diagnosing the moment",
+        "Module 3: Leading",
+        "Module 4: Managing, including warning signs of over- and under-managing",
+        "Module 5: Mentoring",
+        "Module 6: Putting the modes together, with a capstone",
+        "Module 7: Continuing development"
+      ],
+      "price": "$30",
+      "checkoutUrl": "https://buy.stripe.com/4gM28t8bOekYg491ON4Vy04",
+      "stripePriceId": "price_1UZgRSRr7y7L3AMyvlofkHXD",
+      "file": "CLG_Wrong_Mode_Course.pdf"
+    }
+  ],
+  "mentoring": {
+    "headline": "Mentoring",
+    "intro": "Ongoing one-on-one guidance for leaders and engineers who want to grow faster. Choose the rhythm that fits you.",
+    "plans": [
+      {
+        "name": "Starter",
+        "interval": "per week, billed weekly",
+        "features": [
+          "1 hour per week, dedicated to you",
+          "Ask questions and discuss the problems you are facing",
+          "Develop action plans to move forward as a leader"
+        ],
+        "checkoutUrl": "https://buy.stripe.com/6oU8wReAca4Ig49alj4Vy03",
+        "prices": [
+          {
+            "currency": "USD",
+            "amount": "50.00",
+            "region": ""
+          }
+        ],
+        "sessionsPerPeriod": 1
+      },
+      {
+        "name": "Pro",
+        "interval": "per month, billed monthly",
+        "features": [
+          "1 hour per week with 4 sessions totla, dedicated to you",
+          "Ask questions and discuss the problems you are facing",
+          "Develop action plans to move forward as a leader"
+        ],
+        "checkoutUrl": "https://buy.stripe.com/cNidRb8bOekYdW1fFD4Vy02",
+        "prices": [
+          {
+            "currency": "USD",
+            "amount": "150.00",
+            "region": ""
+          }
+        ],
+        "sessionsPerPeriod": 4
+      },
+      {
+        "name": "Advanced",
+        "interval": "every 3 months, billed quarterly",
+        "features": [
+          "1 hour per week with 12 sessions total, dedicated to you",
+          "Ask questions and discuss the problems you are facing",
+          "Develop action plans to move forward as a leader"
+        ],
+        "checkoutUrl": "https://buy.stripe.com/8x28wR8bOb8M7xDgJH4Vy01",
+        "prices": [
+          {
+            "currency": "USD",
+            "amount": "400.00",
+            "region": ""
+          }
+        ],
+        "sessionsPerPeriod": 13
+      }
+    ],
+    "policy": {
+      "noticeDays": 30
+    }
+  }
+}
