@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 120" width="1280" height="480">
+  <title>Crucible Leadership Guild - The vessel (reversed)</title>
+  <style>@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&amp;display=swap'); .w{font-family:Cinzel,Georgia,serif}</style>
+  <rect width="320" height="120" fill="#1C2430"/>
+  <path d="M52 8 C62 20 66 30 60 40 C59 34 56 31 54 28 C53 34 48 36 47 42 C40 34 42 22 52 8 Z" fill="#B5562A"/>
+  <rect x="18" y="46" width="68" height="8" rx="2" fill="#F4F1EA"/>
+  <path d="M24 56 L80 56 L72 98 Q70 104 64 104 L40 104 Q34 104 32 98 Z" fill="#F4F1EA"/>
+  <path d="M27 63 L77 63 L76 69 L28 69 Z" fill="#B5562A"/>
+  <text x="104" y="68" class="w" fill="#F4F1EA" font-size="30" font-weight="700" letter-spacing="2">CRUCIBLE</text>
+  <rect x="106" y="78" width="28" height="2" fill="#C9A45C"/>
+  <text x="106" y="98" class="w" fill="#C9A45C" font-size="12" font-weight="500" letter-spacing="3.5">LEADERSHIP GUILD</text>
+</svg>
