@@ -1,5 +1,5 @@
 // Zero-dependency static site generator. Usage: node build.mjs
-// Reads products.json, writes the site to dist/. 
+// Reads products.json, writes the site to dist/.
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync } from "node:fs";
 import { join } from "node:path";
 
@@ -117,7 +117,7 @@ ${p.description.map((d) => `<p>${esc(d)}</p>`).join("\n")}
 <h2>What you get</h2><ul>${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
 <p class="price">${esc(p.price)}</p>
 ${buyButton(p.checkoutUrl, "Buy now")}
-<p class="note">Checkout is handled securely by Stripe. After payment you land on your download page. Bookmark it, because that page is your link. If you lose it, email us your receipt. ${esc(site.availability)}</p></article>`,
+<p class="note">Checkout is handled securely by Stripe. After payment you land on your download page. Bookmark it, because that page is your link. If you lose it, email us your receipt. All sales of digital products are final; see <a href="/terms/#digital-products">Terms &amp; refunds</a>. ${esc(site.availability)}</p></article>`,
     })
   );
 }
@@ -264,6 +264,9 @@ const legal = (slug, title) =>
 <h2>Miscellaneous</h2>
 <p>To obtain access to certain services on our website, you may be required to enter personal information. You agree that the information you supply during that  process will be accurate, complete, and apply to you. You will not enter information under the name of, nor attempt to enter the service under the name of, another person. You will be responsible for preserving the confidentiality of your information and will notify us of any known or suspected unauthorized use of your information. At certain places on this website there may be additional or other terms and policies that apply to your use of this website and the services on it. By using the website or those services, you agree to abide by those terms and policies. We can change those terms and policies as needed at our discretion. By continuing to use the website after we post any changes, you accept and agree to those terms and policies, as modified. These Website Terms and Conditions have been written in accordance with the laws of the state of Florida. By using this website, you consent to the exclusive jurisdiction of the state and federal courts in Florida, in all disputes arising out of or relating to these Website Terms and Conditions or this website. In the event that any portion of these Website Terms and Conditions are held to be unenforceable, the unenforceable portion shall be construed in accordance with applicable law as nearly as possible to reflect the original intentions of the parties, and the remainder of the provisions shall remain in full force and effect. By using this website, you agree to abide by the terms of these Website Terms and Conditions. We hope you enjoy using this website, and we welcome suggestions for improvements.</p>
 
+<h2 id="digital-products">Digital products (PDF guides and courses)</h2>
+<p>All sales of digital products are final. Our PDF guides and courses are delivered for immediate download after payment, so we do not offer refunds or exchanges once a purchase is complete.</p>
+<p>If you have trouble downloading or opening your file, email <a href="mailto:${esc(site.email)}">${esc(site.email)}</a> with your receipt and we will help you get it. Nothing in these terms limits any rights you have under the consumer laws where you live.</p>
 <h2 id="mentoring">Mentoring subscriptions</h2>
 <h2>Availability</h2>
 <p>${esc(site.availability)} We cannot accept orders or subscriptions from customers outside the United States.</p>

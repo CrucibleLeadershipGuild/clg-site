@@ -28,7 +28,7 @@
         "Pre-submit checklist with words to avoid and a calibration cheat sheet"
       ],
       "price": "$20",
-      "checkoutUrl": "https://buy.stripe.com/4gM28t8bOekYg491ON4Vy04",
+      "checkoutUrl": "https://buy.stripe.com/5kQeVf2Ru3Gk5pvdxv4Vy05",
       "stripePriceId": "price_1UZfyXRr7y7L3AMy1olEs4dJ",
       "file": "CLG_Review_Season_Kit.pdf"
     },
@@ -81,7 +81,7 @@
         "name": "Pro",
         "interval": "per month, billed monthly",
         "features": [
-          "1 hour per week with 4 sessions totla, dedicated to you",
+          "1 hour per week, dedicated to you",
           "Ask questions and discuss the problems you are facing",
           "Develop action plans to move forward as a leader"
         ],
@@ -99,7 +99,7 @@
         "name": "Advanced",
         "interval": "every 3 months, billed quarterly",
         "features": [
-          "1 hour per week with 12 sessions total, dedicated to you",
+          "1 hour per week, dedicated to you",
           "Ask questions and discuss the problems you are facing",
           "Develop action plans to move forward as a leader"
         ],

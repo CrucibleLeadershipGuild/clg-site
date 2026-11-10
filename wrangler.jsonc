@@ -1,0 +1,7 @@
+{
+  "name": "clg-site",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-09-01",
+  "assets": { "directory": "./dist", "binding": "ASSETS" },
+  "r2_buckets": [{ "binding": "PDFS", "bucket_name": "clg-pdfs" }]
+}
