@@ -1,11 +1,11 @@
-// Cloudflare Pages Function: GET /download
+// Download handler, called by src/worker.js for GET /download
 // Stripe Payment Links redirect buyers here with ?session_id={CHECKOUT_SESSION_ID}.
 // We re-check that session with Stripe (server side) and only then serve the PDF from a private R2 bucket.
 //
-// Required configuration (Cloudflare Pages > Settings):
+// Required configuration (Cloudflare Worker > Settings):
 //   Secret   STRIPE_SECRET_KEY : a Stripe *restricted* key with read access to Checkout Sessions,
 //                                PaymentIntents and Charges. Never put it in products.json or the repo.
-//   Binding  PDFS              : R2 bucket (private) holding the files named in products.json "file".
+//   Binding  PDFS              : R2 bucket (private), declared in wrangler.jsonc, holding the files named in products.json "file".
 import catalog from "../products.json";
 
 const SESSION_RE = /^cs_(live|test)_[A-Za-z0-9]{10,250}$/;
@@ -70,7 +70,7 @@ async function verify(sid, env) {
   return { ok: true, items };
 }
 
-export async function onRequestGet({ request, env }) {
+export async function handleDownload(request, env) {
   const url = new URL(request.url);
   const sid = url.searchParams.get("session_id") || "";
   const slug = url.searchParams.get("file");
