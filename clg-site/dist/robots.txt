@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /download
-Disallow: /thanks/
-Sitemap: https://crucibleleadershipguild.com/sitemap.xml

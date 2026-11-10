@@ -1,5 +1,5 @@
 // Zero-dependency static site generator. Usage: node build.mjs
-// Reads products.json, writes the site to dist/.
+// Reads products.json, writes the site to dist/. 
 import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync } from "node:fs";
 import { join } from "node:path";
 
