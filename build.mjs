@@ -1,11 +1,14 @@
 // Zero-dependency static site generator. Usage: node build.mjs
 // Reads products.json, writes the site to dist/.
-import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, cpSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const data = JSON.parse(readFileSync("products.json", "utf8"));
 const { site, products, mentoring } = data;
+const about = data.about || null; // optional: { title, description, paragraphs: [] }. The About page is built only when this exists.
 const OUT = "dist";
+const BASE = site.url.replace(/\/$/, "");
+const ORG_ID = `${BASE}/#organization`;
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -23,6 +26,74 @@ function buyButton(url, label) {
     : `<span class="btn btn-disabled" aria-disabled="true">Coming soon</span>`;
 }
 
+// ---- SEO helpers -------------------------------------------------------------------------------
+// JSON-LD is a data block, not executable script, so the CSP (default-src 'self') does not block it.
+const jsonLd = (objs) =>
+  objs
+    .map((o) => `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", ...o }).replace(/</g, "\\u003c")}</script>`)
+    .join("\n");
+const priceNum = (s) => Number(String(s).replace(/[^0-9.]/g, "")).toFixed(2);
+const absUrl = (p) => (p.startsWith("http") ? p : BASE + p);
+const organization = {
+  "@type": "Organization",
+  "@id": ORG_ID,
+  name: site.name,
+  alternateName: site.short,
+  url: BASE + "/",
+  logo: absUrl(site.logoUrl || "/favicon.svg"),
+  email: site.email,
+  ...(Array.isArray(site.sameAs) && site.sameAs.length ? { sameAs: site.sameAs.filter((u) => safeUrl(u)) } : {}),
+};
+
+// Minimal Markdown for blog posts: ## / ### headings, paragraphs, "- " and "1. " lists, > quotes,
+// **bold**, *italic*, and [text](/path or https://url) links. Raw HTML is escaped, never passed through.
+function mdInline(s) {
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>")
+    .replace(/\[([^\]]+)\]\((\/[^)\s]*|https:\/\/[^)\s]*|mailto:[^)\s]+)\)/g, (_, t, u) => `<a href="${u}">${t}</a>`);
+}
+function mdToHtml(src) {
+  return src
+    .replace(/\r\n/g, "\n")
+    .split(/\n{2,}/)
+    .map((b) => b.trim())
+    .filter(Boolean)
+    .map((b) => {
+      const lines = b.split("\n");
+      if (/^### /.test(b)) return `<h3>${mdInline(b.slice(4))}</h3>`;
+      if (/^## /.test(b)) return `<h2>${mdInline(b.slice(3))}</h2>`;
+      if (lines.every((l) => /^- /.test(l))) return `<ul>${lines.map((l) => `<li>${mdInline(l.slice(2))}</li>`).join("")}</ul>`;
+      if (lines.every((l) => /^\d+\. /.test(l))) return `<ol>${lines.map((l) => `<li>${mdInline(l.replace(/^\d+\. /, ""))}</li>`).join("")}</ol>`;
+      if (lines.every((l) => /^> ?/.test(l))) return `<blockquote><p>${mdInline(lines.map((l) => l.replace(/^> ?/, "")).join(" "))}</p></blockquote>`;
+      return `<p>${mdInline(lines.join(" "))}</p>`;
+    })
+    .join("\n");
+}
+// content/posts/*.md, each with a front-matter block:
+//   title, description, date (YYYY-MM-DD), updated (optional), product (optional slug for the end-of-post CTA),
+//   seoTitle (optional), draft (true = not built)
+function loadPosts() {
+  if (!existsSync("content/posts")) return [];
+  return readdirSync("content/posts")
+    .filter((f) => f.endsWith(".md"))
+    .map((f) => {
+      const raw = readFileSync(join("content/posts", f), "utf8").replace(/\r\n/g, "\n");
+      const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
+      if (!m) throw new Error(`content/posts/${f}: missing front matter`);
+      const fm = {};
+      for (const line of m[1].split("\n")) {
+        const i = line.indexOf(":");
+        if (i > 0) fm[line.slice(0, i).trim()] = line.slice(i + 1).trim().replace(/^["']|["']$/g, "");
+      }
+      for (const k of ["title", "description", "date"]) if (!fm[k]) throw new Error(`content/posts/${f}: front matter needs "${k}"`);
+      return { slug: f.replace(/\.md$/, ""), fm, body: m[2] };
+    })
+    .filter((p) => p.fm.draft !== "true")
+    .sort((a, b) => b.fm.date.localeCompare(a.fm.date));
+}
+const posts = loadPosts();
+
 // Inline a brand SVG. The source files @import Google Fonts in a <style> block, which is blocked
 // by our CSP and ignored inside <img>, so we strip it and style text via /styles.css (self-hosted Cinzel).
 function logo(variant) {
@@ -39,8 +110,17 @@ function logo(variant) {
     .trim();
 }
 
-function page({ title, description, path, body, noindex = false }) {
-  const canonical = site.url.replace(/\/$/, "") + path;
+function page({ title, description, path, body, noindex = false, ogType = "website", image = "", jsonld = [] }) {
+  const canonical = BASE + path;
+  const social = noindex
+    ? ""
+    : `<meta property="og:site_name" content="${esc(site.name)}">
+<meta property="og:type" content="${esc(ogType)}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="${esc(canonical)}">
+${image ? `<meta property="og:image" content="${esc(absUrl(image))}">\n` : ""}<meta name="twitter:card" content="summary">
+`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -49,14 +129,14 @@ function page({ title, description, path, body, noindex = false }) {
 ${noindex ? '<meta name="robots" content="noindex">\n' : ""}<title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${esc(canonical)}">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+${social}<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="/fonts/cinzel-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/styles.css">
-</head>
+${jsonld.length ? jsonLd(jsonld) + "\n" : ""}</head>
 <body>
 <header class="wrap bar">
   <a class="brand" href="/" aria-label="${esc(site.name)} home">${logo("primary")}</a>
-  <nav><a href="/#products">Products</a><a href="/mentoring/">Mentoring</a></nav>
+  <nav><a href="/#products">Products</a><a href="/mentoring/">Mentoring</a>${posts.length ? '<a href="/blog/">Guides</a>' : ""}${about ? '<a href="/about/">About</a>' : ""}</nav>
 </header>
 <main class="wrap">
 ${body}
@@ -82,14 +162,16 @@ mkdirSync(OUT, { recursive: true });
 cpSync("static", OUT, { recursive: true });
 
 // Home
+const seo = site.seo || {};
 write(
   "",
   page({
-    title: `${site.name}: ${site.tagline}`,
-    description: site.tagline,
+    title: seo.title || `${site.name}: ${site.tagline}`,
+    description: seo.description || site.tagline,
     path: "/",
+    jsonld: [organization, { "@type": "WebSite", "@id": `${BASE}/#website`, url: BASE + "/", name: site.name, publisher: { "@id": ORG_ID } }],
     body: `<section class="hero"><h1>${esc(site.tagline)}</h1>
-<p>Practical PDF guides and one-on-one mentoring from ${esc(site.name)}.</p></section>
+<p>${esc(seo.lede || `Practical PDF guides and one-on-one mentoring from ${site.name}.`)}</p></section>
 <section id="products"><h2>Products</h2><div class="grid">
 ${products
   .map(
@@ -106,18 +188,52 @@ ${products
 
 // Product pages
 for (const p of products) {
+  const img = p.image || "";
+  const url = `${BASE}/products/${p.slug}/`;
+  const faq = Array.isArray(p.faq) ? p.faq : [];
   write(
     `products/${p.slug}`,
     page({
-      title: `${p.name} | ${site.name}`,
-      description: p.summary,
+      title: p.seoTitle || `${p.name} | ${site.name}`,
+      description: p.seoDescription || p.summary,
       path: `/products/${p.slug}/`,
+      ogType: "product",
+      image: img,
+      jsonld: [
+        {
+          "@type": "Product",
+          name: p.name,
+          description: p.seoDescription || p.summary,
+          sku: p.slug,
+          url,
+          ...(img ? { image: [absUrl(img)] } : {}),
+          brand: { "@type": "Brand", name: site.name },
+          offers: {
+            "@type": "Offer",
+            url,
+            price: priceNum(p.price),
+            priceCurrency: "USD",
+            availability: safeUrl(p.checkoutUrl) ? "https://schema.org/InStock" : "https://schema.org/PreOrder",
+            seller: { "@id": ORG_ID },
+            eligibleRegion: { "@type": "Country", name: "US" },
+            hasMerchantReturnPolicy: {
+              "@type": "MerchantReturnPolicy",
+              applicableCountry: "US",
+              returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+            },
+          },
+        },
+      ],
       body: `<article><h1>${esc(p.name)}</h1>
+${p.lede ? `<p class="lede">${esc(p.lede)}</p>` : ""}
+${img ? `<img class="pimg" src="${esc(img)}" alt="${esc(p.imageAlt || p.name)}" width="320" height="320">` : ""}
 ${p.description.map((d) => `<p>${esc(d)}</p>`).join("\n")}
+${Array.isArray(p.audience) && p.audience.length ? `<h2>Who it is for</h2><ul>${p.audience.map((a) => `<li>${esc(a)}</li>`).join("")}</ul>` : ""}
 <h2>What you get</h2><ul>${p.includes.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>
 <p class="price">${esc(p.price)}</p>
 ${buyButton(p.checkoutUrl, "Buy now")}
-<p class="note">Checkout is handled securely by Stripe. After payment you land on your download page. Bookmark it, because that page is your link. If you lose it, email us your receipt. All sales of digital products are final; see <a href="/terms/#digital-products">Terms &amp; refunds</a>. ${esc(site.availability)}</p></article>`,
+<p class="note">Checkout is handled securely by Stripe. After payment you land on your download page. Bookmark it, because that page is your link. If you lose it, email us your receipt. All sales of digital products are final; see <a href="/terms/#digital-products">Terms &amp; refunds</a>. ${esc(site.availability)}</p>
+${faq.length ? `<h2>Questions</h2>${faq.map((f) => `<h3>${esc(f.q)}</h3><p>${esc(f.a)}</p>`).join("")}` : ""}</article>`,
     })
   );
 }
@@ -126,9 +242,27 @@ ${buyButton(p.checkoutUrl, "Buy now")}
 write(
   "mentoring",
   page({
-    title: `${mentoring.headline} | ${site.name}`,
-    description: mentoring.intro,
+    title: mentoring.seoTitle || `${mentoring.headline} | ${site.name}`,
+    description: mentoring.seoDescription || mentoring.intro,
     path: "/mentoring/",
+    jsonld: [
+      {
+        "@type": "Service",
+        name: mentoring.seoName || "One-on-one leadership mentoring",
+        serviceType: "Mentoring",
+        description: mentoring.intro,
+        url: `${BASE}/mentoring/`,
+        provider: { "@id": ORG_ID },
+        areaServed: { "@type": "Country", name: "US" },
+        offers: mentoring.plans.map((pl) => ({
+          "@type": "Offer",
+          name: `${pl.name} (${pl.interval})`,
+          url: `${BASE}/mentoring/`,
+          price: priceNum(pl.prices[0].amount),
+          priceCurrency: pl.prices[0].currency,
+        })),
+      },
+    ],
     body: `<h1>${esc(mentoring.headline)}</h1><p>${esc(mentoring.intro)}</p><p class="note">${esc(site.availability)}</p><div class="grid">
 ${mentoring.plans
   .map(
@@ -144,9 +278,75 @@ ${buyButton(pl.checkoutUrl, "Subscribe")}</article>`
 <p>Every plan includes one dedicated hour per week. After you subscribe, we email you a private link to our calendar so you can book your sessions at times that suit you. Times are shown in your own time zone.</p>
 <h2>Cancelling</h2>
 <p>To receive a prorated refund for unused sessions, send us ${mentoring.policy.noticeDays} days' written notice. See the <a href="/terms/#mentoring">full cancellation and refund terms</a>.</p>
-${safeUrl(site.portalUrl) ? `<p>To update your card or download invoices, <a href="${esc(safeUrl(site.portalUrl))}" rel="noopener">open your billing portal</a>.</p>` : ""}</section>`,
+${safeUrl(site.portalUrl) ? `<p>To update your card or download invoices, <a href="${esc(safeUrl(site.portalUrl))}" rel="noopener">open your billing portal</a>.</p>` : ""}</section>
+${Array.isArray(mentoring.faq) && mentoring.faq.length ? `<section><h2>Questions</h2>${mentoring.faq.map((f) => `<h3>${esc(f.q)}</h3><p>${esc(f.a)}</p>`).join("")}</section>` : ""}`,
   })
 );
+
+// About page (built only when products.json has an "about" block).
+if (about) {
+  write(
+    "about",
+    page({
+      title: about.title || `About | ${site.name}`,
+      description: about.description || site.tagline,
+      path: "/about/",
+      jsonld: [{ "@type": "AboutPage", url: `${BASE}/about/`, mainEntity: { "@id": ORG_ID } }],
+      body: `<h1>${esc(about.heading || `About ${site.name}`)}</h1>\n${about.paragraphs.map((t) => `<p>${mdInline(t)}</p>`).join("\n")}`,
+    })
+  );
+}
+
+// Blog: /blog/ index and /blog/<slug>/ posts, built from content/posts/*.md.
+if (posts.length) {
+  write(
+    "blog",
+    page({
+      title: `Guides for new managers and reviewers | ${site.name}`,
+      description: "Practical guides on writing performance reviews, leading, managing and mentoring.",
+      path: "/blog/",
+      body: `<h1>Guides</h1>
+<div class="grid">
+${posts
+  .map(
+    (p) => `<article class="card"><h3><a href="/blog/${esc(p.slug)}/">${esc(p.fm.title)}</a></h3>
+<p>${esc(p.fm.description)}</p><p class="note">${esc(p.fm.date)}</p></article>`
+  )
+  .join("\n")}
+</div>`,
+    })
+  );
+  for (const p of posts) {
+    const prod = products.find((x) => x.slug === p.fm.product);
+    write(
+      `blog/${p.slug}`,
+      page({
+        title: p.fm.seoTitle || `${p.fm.title} | ${site.name}`,
+        description: p.fm.description,
+        path: `/blog/${p.slug}/`,
+        ogType: "article",
+        image: prod ? prod.image : "",
+        jsonld: [
+          {
+            "@type": "BlogPosting",
+            headline: p.fm.title,
+            description: p.fm.description,
+            datePublished: p.fm.date,
+            dateModified: p.fm.updated || p.fm.date,
+            mainEntityOfPage: `${BASE}/blog/${p.slug}/`,
+            author: site.author ? { "@type": "Person", name: site.author } : { "@id": ORG_ID },
+            publisher: { "@id": ORG_ID },
+          },
+        ],
+        body: `<article><h1>${esc(p.fm.title)}</h1>
+<p class="note">${esc(p.fm.updated ? `Updated ${p.fm.updated}` : p.fm.date)}${site.author ? ` · ${esc(site.author)}` : ""}</p>
+${mdToHtml(p.body)}
+${prod ? `<aside class="card"><h2>${esc(prod.name)}</h2><p>${esc(prod.summary)}</p><p class="price">${esc(prod.price)}</p><a class="btn" href="/products/${esc(prod.slug)}/">See what is inside</a></aside>` : ""}
+</article>`,
+      })
+    );
+  }
+}
 
 // Post-checkout page for mentoring subscribers (set as the Payment Link's confirmation redirect).
 write(
@@ -290,12 +490,22 @@ const legal = (slug, title) =>
 legal("privacy", "Privacy policy");
 
 // Sitemap
-const paths = ["/", "/mentoring/", "/terms/", "/privacy/", ...products.map((p) => `/products/${p.slug}/`)];
-const base = site.url.replace(/\/$/, "");
+// lastmod is emitted only where it is true: for blog posts (from front matter).
+const entries = [
+  "/",
+  "/mentoring/",
+  ...(about ? ["/about/"] : []),
+  ...products.map((p) => `/products/${p.slug}/`),
+  ...(posts.length ? ["/blog/", ...posts.map((p) => ({ path: `/blog/${p.slug}/`, lastmod: p.fm.updated || p.fm.date }))] : []),
+  "/terms/",
+  "/privacy/",
+].map((e) => (typeof e === "string" ? { path: e } : e));
+const paths = entries.map((e) => e.path);
+const base = BASE;
 writeFileSync(
   join(OUT, "sitemap.xml"),
-  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${paths
-    .map((p) => `<url><loc>${esc(base + p)}</loc></url>`)
+  `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries
+    .map((e) => `<url><loc>${esc(base + e.path)}</loc>${e.lastmod ? `<lastmod>${esc(e.lastmod)}</lastmod>` : ""}</url>`)
     .join("\n")}\n</urlset>\n`
 );
 writeFileSync(join(OUT, "robots.txt"), `User-agent: *\nAllow: /\nDisallow: /download\nDisallow: /thanks/\nSitemap: ${base}/sitemap.xml\n`);

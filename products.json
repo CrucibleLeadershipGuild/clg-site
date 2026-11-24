@@ -7,7 +7,25 @@
     "url": "https://crucibleleadershipguild.com",
     "email": "leadership@crucibleleadershipguild.com",
     "availability": "Available to customers in the United States only.",
-    "portalUrl": "https://billing.stripe.com/p/login/dRmcN79fSekYdW1ctr4Vy00"
+    "portalUrl": "https://billing.stripe.com/p/login/dRmcN79fSekYdW1ctr4Vy00",
+    "seo": {
+      "title": "Crucible Leadership Guild: Performance Review Kit & Mentoring",
+      "description": "A performance review kit, a course on leading, managing and mentoring, and weekly one-on-one mentoring for leaders and engineers. US only.",
+      "lede": "A performance review kit, a course on choosing between leading, managing and mentoring, and weekly one-on-one mentoring for leaders and engineers."
+    },
+    "sameAs": [],
+    "author": "Zack Turnbow"
+  },
+  "about": {
+    "title": "About Crucible Leadership Guild",
+    "description": "Who is behind Crucible Leadership Guild: [one line on your background]. Practical leadership tools and mentoring.",
+    "heading": "About Crucible Leadership Guild",
+    "paragraphs": [
+      "Crucible Leadership Guild (CLG) makes practical leadership tools and offers one-on-one mentoring for leaders and engineers. It is run by Zack Turnbow, a seasoned software developer and leader who has interviewed, hired and mentored software engineers for 15 years at various companies.",
+      "The idea behind CLG is simple: most people are promoted for being good at the work and then trained only in the mechanics of management. Our tools and mentoring focus on the judgment that comes after: how to write a fair review, how to tell whether a moment needs leading, managing or mentoring, and how to grow as a leader without losing what made you good at the work.",
+      "Writing reviews can be daunting since it directlyimpacts the people you lead. The Review Season Kit provides assistance in areas that can be hard to navigate as a leader. There are other times as a leader that you would have liked to be more effective. You might have all the necessary skills but perhaps you need to know when the right time to use a particular skill. The Wrong Mode Course helps point out the right time to use your skills to be an effective leader.",
+      "CLG is a Florida LLC. You can reach us at [leadership@crucibleleadershipguild.com](mailto:leadership@crucibleleadershipguild.com). We sell to customers in the United States."
+    ]
   },
   "products": [
     {
@@ -30,7 +48,43 @@
       "price": "$20",
       "checkoutUrl": "https://buy.stripe.com/5kQeVf2Ru3Gk5pvdxv4Vy05",
       "stripePriceId": "price_1UZfyXRr7y7L3AMy1olEs4dJ",
-      "file": "CLG_Review_Season_Kit.pdf"
+      "file": "CLG_Review_Season_Kit.pdf",
+      "image": "/img/review-season-kit.png",
+      "imageAlt": "Cover of the CLG Review Season Kit, a PDF of performance review phrases, scripts and templates",
+      "seoTitle": "Performance Review Phrases, Scripts & Templates (PDF) | CLG",
+      "seoDescription": "300+ performance review phrases, 5 conversation scripts and a self-evaluation template in a PDF. Write fair, specific reviews without the blank page. $20.",
+      "lede": "A PDF toolkit for writing performance reviews and self-evaluations: 300+ phrases, 5 conversation scripts and ready-to-use templates.",
+      "audience": [
+        "Managers at any level writing year-end or mid-year performance reviews",
+        "Anyone writing a self-evaluation for their own review",
+        "Managers facing harder cases: remote employees, former peers, top performers, people who are great at the job but hard to work with, or a review that may lead to a PIP"
+      ],
+      "faq": [
+        {
+          "q": "What format is the Review Season Kit?",
+          "a": "A PDF that you download right after payment. Your download page is your link, so bookmark it."
+        },
+        {
+          "q": "How are the phrases organized?",
+          "a": "300 phrases across 10 skill areas and 3 rating levels. Every phrase follows one rule: describe what the person did, why it mattered, and what happens next."
+        },
+        {
+          "q": "Does it help with difficult reviews?",
+          "a": "Yes. It includes guidance for remote employees, top performers, people who are great at the job but hard to work with, former peers, a hard personal year, and reviews that may lead to a PIP."
+        },
+        {
+          "q": "Is this legal or HR advice?",
+          "a": "No. The kit offers general guidance on writing reviews. Check your own company's policies and ask your HR team or an employment lawyer where the stakes are high."
+        },
+        {
+          "q": "Can I get a refund?",
+          "a": "All sales of digital products are final. If you have trouble downloading or opening the file, email us with your receipt and we will help. See the Terms & refunds page for details."
+        },
+        {
+          "q": "Is it available outside the United States?",
+          "a": "Not yet. We can only accept orders from customers in the United States."
+        }
+      ]
     },
     {
       "slug": "wrong-mode-course",
@@ -52,7 +106,38 @@
       "price": "$30",
       "checkoutUrl": "https://buy.stripe.com/4gM28t8bOekYg491ON4Vy04",
       "stripePriceId": "price_1UZgRSRr7y7L3AMyvlofkHXD",
-      "file": "CLG_Wrong_Mode_Course.pdf"
+      "file": "CLG_Wrong_Mode_Course.pdf",
+      "image": "/img/wrong-mode-course.png",
+      "imageAlt": "Cover of the CLG Wrong Mode Course, a PDF course on leading, managing and mentoring",
+      "seoTitle": "Lead, Manage or Mentor? The Wrong Mode Course (PDF) | CLG",
+      "seoDescription": "A 7-module course on when to lead, manage or mentor, with a three-question diagnostic, exercises and sources for every cited idea. PDF download, $30.",
+      "lede": "A 7-module course on choosing the right mode for the moment: leading, managing or mentoring.",
+      "audience": [
+        "People who were promoted for being good at the work and now lead, manage or mentor others",
+        "Team leads and managers who want a clear way to decide how to respond to each situation"
+      ],
+      "faq": [
+        {
+          "q": "What are the three modes?",
+          "a": "Leading, managing and mentoring. The course treats them as three modes one person switches between, often in the same week, not as three separate roles."
+        },
+        {
+          "q": "What does \"wrong mode\" mean?",
+          "a": "Using the wrong mode at the wrong moment, such as mentoring someone who needed a clear decision. The course gives you a three-question diagnostic to choose the right mode."
+        },
+        {
+          "q": "What format is the course?",
+          "a": "A PDF you download right after payment, in seven modules with exercises, discussion questions and sources for every cited idea."
+        },
+        {
+          "q": "Can I get a refund?",
+          "a": "All sales of digital products are final. See the Terms & refunds page for details."
+        },
+        {
+          "q": "Is it available outside the United States?",
+          "a": "Not yet. We can only accept orders from customers in the United States."
+        }
+      ]
     }
   ],
   "mentoring": {
@@ -116,6 +201,30 @@
     ],
     "policy": {
       "noticeDays": 30
-    }
+    },
+    "seoTitle": "1-on-1 Leadership Mentoring for Managers & Engineers | CLG",
+    "seoDescription": "Weekly one-hour mentoring for leaders and engineers. Bring real problems, leave with an action plan. Plans from $50 per week. US only.",
+    "faq": [
+      {
+        "q": "What happens in a session?",
+        "a": "Each plan includes one dedicated hour per week. You ask questions, discuss the problems you are facing, and develop action plans to move forward as a leader."
+      },
+      {
+        "q": "How do the plans differ?",
+        "a": "All three include one hour per week. They differ only in billing rhythm: weekly, monthly or every three months."
+      },
+      {
+        "q": "How do I book sessions?",
+        "a": "After you subscribe we email you a private link to our calendar. You book sessions at times that suit you, shown in your own time zone."
+      },
+      {
+        "q": "Can I cancel?",
+        "a": "Yes. Send 30 days' written notice to receive a prorated refund for unused sessions. See the Terms & refunds page for the full policy."
+      },
+      {
+        "q": "Is mentoring available outside the United States?",
+        "a": "Not yet. We can only accept subscriptions from customers in the United States."
+      }
+    ]
   }
 }
